@@ -4,35 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatelessWidget {
   static const routeName = '/home';
+  Future _fetchData() async {
+    List data = [];
+    final url = Uri.parse("https://jsonplaceholder.typicode.com/photos");
+    Client client = http.Client();
+    try {
+      var response = await client.get(url);
+      data = json.decode(response.body);
+    } catch (error) {
+      print(error);
+    }
 
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  var url = Uri.parse("https://jsonplaceholder.typicode.com/photos");
-  var data;
-  Client client = http.Client();
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchData();
+    return data;
   }
 
-  _fetchData() async {
-    var request = await client.get(url);
-    data = json.decode(request.body);
-    setState(() {});
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
+  const MyHomePage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,20 +31,37 @@ class _MyHomePageState extends State<MyHomePage> {
           style: Theme.of(context).textTheme.headline1,
         ),
       ),
-      body: data != null
-          ? ListView.builder(
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(data[index]['title']),
-                  subtitle: Text("ID: ${data[index]['id']}"),
-                  leading: Image.network(data[index]['url']),
+      body: FutureBuilder(
+        future: _fetchData(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              return Center(
+                child: Text('Fetch something'),
+              );
+            case ConnectionState.active:
+            case ConnectionState.waiting:
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            case ConnectionState.done:
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text("Oops! somthing went wrong."),
                 );
-              },
-              itemCount: data.length,
-            )
-          : Center(
-              child: CircularProgressIndicator(),
-            ),
+              } else {}
+              return ListView.builder(
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(snapshot.data![index]['title']),
+                    subtitle: Text("ID: ${snapshot.data![index]['id']}"),
+                  );
+                },
+                itemCount: snapshot.data!.length,
+              );
+          }
+        },
+      ),
     );
   }
 }
