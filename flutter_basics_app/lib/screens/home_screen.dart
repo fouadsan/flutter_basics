@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/drawer.dart';
+
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, required this.title}) : super(key: key);
 
@@ -10,8 +12,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var _name = "Not Assigned";
-  TextEditingController _nameController = TextEditingController();
+  var name = "Not Assigned";
+  TextEditingController nameController = TextEditingController();
 
   @override
   void initState() {
@@ -63,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         height: 20.0,
                       ),
                       Text(
-                        _name,
+                        name,
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
                       SizedBox(
@@ -72,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: TextField(
-                          controller: _nameController,
+                          controller: nameController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: "Enter Your Name",
@@ -88,36 +90,10 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: const EdgeInsets.all(0),
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountName: Text(_nameController.text.isNotEmpty
-                  ? _nameController.text
-                  : _name),
-              accountEmail: Text("Example@example.com"),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    'https://images.unsplash.com/photo-1553272725-086100aecf5e?ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1601&q=80'),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.email),
-              title: Text(
-                'Fouad Benayad',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-              subtitle: Text("Developer"),
-              trailing: Icon(Icons.edit),
-              onTap: () {},
-            ),
-          ],
-        ),
-      ),
+      drawer: MyDrawer(name: name, nameController: nameController),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _name = _nameController.text;
+          name = nameController.text;
           setState(() {});
         },
         backgroundColor: Theme.of(context).primaryColor,
