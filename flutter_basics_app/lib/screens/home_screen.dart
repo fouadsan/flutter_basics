@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/drawer.dart';
+import '../widgets/profile_card.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -50,42 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               ),
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: Column(
-                    children: <Widget>[
-                      CircleAvatar(
-                        backgroundImage: AssetImage(
-                          'assets/images/example.jpg',
-                        ),
-                        radius: 100,
-                      ),
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                      Text(
-                        name,
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: TextField(
-                          controller: nameController,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: "Enter Your Name",
-                            labelText: "Name",
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              child: MyProfileCard(name: name, nameController: nameController),
             ),
           ),
         ),
