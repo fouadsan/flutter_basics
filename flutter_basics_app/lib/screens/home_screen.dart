@@ -10,14 +10,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +20,30 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       body: Container(
-        child: Text("Hello Flutter"),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Container(
+              height: 100.0,
+              width: 100.0,
+              color: Colors.red,
+              alignment: Alignment.center,
+            ),
+            Container(
+              height: 100.0,
+              width: 100.0,
+              color: Colors.yellow,
+              alignment: Alignment.center,
+            ),
+            Container(
+              height: 100.0,
+              width: 100.0,
+              color: Colors.blue,
+              alignment: Alignment.center,
+            ),
+          ],
+        ),
       ),
     );
   }
