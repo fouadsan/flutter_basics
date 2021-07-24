@@ -20,6 +20,12 @@ class MyHomePage extends StatelessWidget {
     return data;
   }
 
+  Stream<List<String>> _getStream() {
+    var data = Stream<List<String>>.fromIterable(
+        [List<String>.generate(20, (index) => "object $index")]);
+    return data;
+  }
+
   const MyHomePage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -31,8 +37,8 @@ class MyHomePage extends StatelessWidget {
           style: Theme.of(context).textTheme.headline1,
         ),
       ),
-      body: FutureBuilder(
-        future: _fetchData(),
+      body: StreamBuilder(
+        stream: _getStream(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
@@ -46,18 +52,15 @@ class MyHomePage extends StatelessWidget {
               );
             case ConnectionState.done:
               if (snapshot.hasError) {
-                return Center(
-                  child: Text("Oops! somthing went wrong."),
-                );
-              } else {}
+                return Center(child: Text('OOops! somthing went wrong'));
+              }
               return ListView.builder(
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(snapshot.data![index]['title']),
-                    subtitle: Text("ID: ${snapshot.data![index]['id']}"),
+                    title: Text(snapshot.data[index]),
                   );
                 },
-                itemCount: snapshot.data!.length,
+                itemCount: snapshot.data.length,
               );
           }
         },
